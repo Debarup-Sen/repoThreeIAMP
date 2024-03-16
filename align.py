@@ -161,50 +161,50 @@ if 'BLASTp' in tool:
             if outfmt == 'def':
                 myFile = [i for i in open('blast_output_def2').readlines()]
                 lit.text(''.join([i for i in myFile[:5] if '# Fields: ' not in i]))
-                try:
-                    headers = [i for i in myFile if '# Fields: ' in i][0].replace('# Fields: ','').split(',')
-                    headers = (['Description', 'Source Organism', 'Target Organism'] +
-                                headers[2:] +
-                               ['IAMP Accession'])
-                    data = [i.strip().split('\t') for i in myFile if '#' not in i]
-                    my_file = open('IAMP.tsv').readlines()
-                    for i in range(len(data)):
-                        for j in range(len(my_file)):
-                            if str(data[i][1].split("|")[0]) in my_file[j]:
-                                line = my_file[j].split('\t')
-                                accs = data[i][1].split("|")[0]
-                                data[i] = (
-                                            [line[2]] +
-                                            [line[5]] +
-                                            [line[8].replace('"', '')] +
-                                            data[i][2:] +
-                                            [
-                                                f'<a target="_blank" href="https://bblserver.org.in/iampdb/entry?id={accs}">{accs}</a>'
-                                            ]
-                                          )
-                                break
-                    myDF = pd.DataFrame(data, columns=headers)
-                    del myFile, data, headers
-                    lit.write("<div style='font-size: 14px; overflow-x: auto; overflow-y: auto'>" + myDF.to_html(escape=False, index=False) + "</div>", unsafe_allow_html=True)
-                    lit.markdown('<br><br><u><b>*Alignments:*</b></u><br>', unsafe_allow_html=True)
-                    myDF.to_csv('blast_output_def2', sep='\t')
-
-                    output1 = ''.join(open('blast_output_def1').readlines()[18:])
-                    crsr = 0
-                    for i in range(len(output1)):
-                        if '>' in output1[i]:
-                            crsr = i
+                #try:
+                headers = [i for i in myFile if '# Fields: ' in i][0].replace('# Fields: ','').split(',')
+                headers = (['Description', 'Source Organism', 'Target Organism'] +
+                            headers[2:] +
+                           ['IAMP Accession'])
+                data = [i.strip().split('\t') for i in myFile if '#' not in i]
+                my_file = open('IAMP.tsv').readlines()
+                for i in range(len(data)):
+                    for j in range(len(my_file)):
+                        if str(data[i][1].split("|")[0]) in my_file[j]:
+                            line = my_file[j].split('\t')
+                            accs = data[i][1].split("|")[0]
+                            data[i] = (
+                                        [line[2]] +
+                                        [line[5]] +
+                                        [line[8].replace('"', '')] +
+                                        data[i][2:] +
+                                        [
+                                            f'<a target="_blank" href="https://bblserver.org.in/iampdb/entry?id={accs}">{accs}</a>'
+                                        ]
+                                      )
                             break
-                    output1 = ''.join(output1[crsr:])
-                    lit.text(output1)
-                    open('blast_output_def1', 'w').write(output1)
-                    open('blast_output', 'w').write(open('blast_output_def2').read()
-                                                    +'\n\nAlignments:\n'+
-                                                    open('blast_output_def1').read())
-                    lit.download_button("Download output file", open('blast_output'), file_name='BLAST_out.txt')
-                except Exception as e:
+                myDF = pd.DataFrame(data, columns=headers)
+                del myFile, data, headers
+                lit.write("<div style='font-size: 14px; overflow-x: auto; overflow-y: auto'>" + myDF.to_html(escape=False, index=False) + "</div>", unsafe_allow_html=True)
+                lit.markdown('<br><br><u><b>*Alignments:*</b></u><br>', unsafe_allow_html=True)
+                myDF.to_csv('blast_output_def2', sep='\t')
+
+                output1 = ''.join(open('blast_output_def1').readlines()[18:])
+                crsr = 0
+                for i in range(len(output1)):
+                    if '>' in output1[i]:
+                        crsr = i
+                        break
+                output1 = ''.join(output1[crsr:])
+                lit.text(output1)
+                open('blast_output_def1', 'w').write(output1)
+                open('blast_output', 'w').write(open('blast_output_def2').read()
+                                                +'\n\nAlignments:\n'+
+                                                open('blast_output_def1').read())
+                lit.download_button("Download output file", open('blast_output'), file_name='BLAST_out.txt')
+                '''except Exception as e:
                     lit.text("No hits found")
-                    print(e)
+                    print(e)'''
 
             elif outfmt == '0':
                 myFile = ''.join([i for i in open('blast_output').readlines()[18:]])
