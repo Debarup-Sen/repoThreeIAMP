@@ -1,4 +1,5 @@
 #Sai
+#Sai
 #OM Sai Ram
 
 #Om Sai Ram
@@ -69,7 +70,7 @@ if 'BLASTp' in tool:
         lit.write('Customization parameters & choices:')
         col5, col6 = lit.columns(2)
         with col5:
-            command = 'blastp -query blast_input.txt '
+            command = 'wsl blastp -query blast_input.txt '
             task = 'blastp'
         ##    task = lit.radio("Type of task:",
         ##                     ('blastp',
@@ -141,13 +142,13 @@ if 'BLASTp' in tool:
                             break
                         j = i.split('\t')
                         if k in j[0]:
-                            g.write('>'+k+'\n'+j[2]+'\n')                                
+                            g.write('>'+k+'\n'+j[-1]+'\n')                                
                             break
         elif query:
             open('blast_input.txt', 'w').write(query)
 
         if query:
-            command += ' -db IAMP'
+            command += ' -db iamp'
 
             if outfmt == 'def':
                 proc.Popen((command+' -out blast_output_def1 -outfmt 0').split())
@@ -157,9 +158,6 @@ if 'BLASTp' in tool:
 
    
             lit.info("Your output below: [Formats 7-13 show no output when no hits are found]")
-
-            user_db = f'User selected databases: {dataset}\n'
-
 
             if outfmt == 'def':
                 myFile = [i for i in open('blast_output_def2').readlines()]
@@ -171,23 +169,18 @@ if 'BLASTp' in tool:
                                ['IAMP Accession'])
                     data = [i.strip().split('\t') for i in myFile if '#' not in i]
                     my_file = open('IAMP.tsv').readlines()
-    ##                lit.write(data[i])
                     for i in range(len(data)):
                         for j in range(len(my_file)):
-                            if str(data[i][1]) in my_file[j]:
+                            if str(data[i][1].split("|")[0]) in my_file[j]:
                                 line = my_file[j].split('\t')
-                                accs = data[i][1]
+                                accs = data[i][1].split("|")[0]
                                 data[i] = (
-                                            [line[1]] +
-                                            [line[4]] +
-                                            [line[6].replace('"', '')] +
+                                            [line[2]] +
+                                            [line[5]] +
+                                            [line[8].replace('"', '')] +
                                             data[i][2:] +
                                             [
-                                                (
-                                                    f'<a target="_blank" href="https://bblserver.org.in/tamrsar/IAMP/non-clinical/non-clinical-entry?id={accs}&db=non_clinical">{accs}</a>'
-                                                    if dataset == "Non-clinical Dataset"
-                                                    else f'<a target="_blank" href="https://bblserver.org.in/tamrsar/IAMP/clinical/clinical-entry?id={accs}&db=clinical">{accs}</a>'
-                                                )
+                                                f'<a target="_blank" href="https://bblserver.org.in/iampdb/entry?id={accs}">{accs}</a>'
                                             ]
                                           )
                                 break
@@ -206,8 +199,7 @@ if 'BLASTp' in tool:
                     output1 = ''.join(output1[crsr:])
                     lit.text(output1)
                     open('blast_output_def1', 'w').write(output1)
-
-                    open('blast_output', 'w').write(open('blast_output_def2').read().replace('user_database', user_db)
+                    open('blast_output', 'w').write(open('blast_output_def2').read()
                                                     +'\n\nAlignments:\n'+
                                                     open('blast_output_def1').read())
                     lit.download_button("Download output file", open('blast_output'), file_name='BLAST_out.txt')
@@ -315,7 +307,7 @@ if 'BLASTp' in tool:
 if 'MUSCLE' in tool:
     col7, col8 = lit.columns(2)
     with col7:
-        multiseq = lit.text_area('Enter your input protein sequences (in FASTA format/multi-FASTA format/IAMP Acc. ID, e.g. IAMP111 one in each line) here:',
+        multiseq = lit.text_area('Enter your input protein sequences (in FASTA format/multi-FASTA format/IAMP Acc. ID, (e.g. IAMP111) one in each line) here:',
                             height=200).upper()
     with col8:
         file_query = lit.file_uploader("Or, you may upload file")
@@ -359,7 +351,7 @@ if 'MUSCLE' in tool:
     if multiseq and submit:
         if len([i for i in multiseq.split('\n') if i!=''])>=1 and ('IAMP' or 'IAMPFCS') in multiseq:
             multiseq = [i for i in multiseq.replace(' ', '').split('\n') if i!='']
-            with (open('IAMP_Non_clinical_all_data.tsv') if 'IAMP' in multiseq else open('IAMP_Clinical_all_data.tsv')) as f, open(r'muscle_input.txt', 'w') as g:
+            with open('IAMP.tsv'), open(r'muscle_input.txt', 'w') as g:
                 for k in multiseq:
                     f.seek(0,0)
                     l = ' '
@@ -370,8 +362,8 @@ if 'MUSCLE' in tool:
                             multiseq = None
                             break
                         j = i.split('\t')
-                        if k in j[1]:
-                            g.write('>'+k+'\n'+j[3]+'\n')
+                        if k in j[0]:
+                            g.write('>'+k+'\n'+j[-1]+'\n')
                             break
         else:
             open('muscle_input.txt', 'w').write(multiseq)
