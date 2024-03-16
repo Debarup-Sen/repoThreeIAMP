@@ -1,5 +1,4 @@
 #Sai
-#Sai
 #OM Sai Ram
 
 #Om Sai Ram
