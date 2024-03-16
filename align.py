@@ -70,7 +70,7 @@ if 'BLASTp' in tool:
         lit.write('Customization parameters & choices:')
         col5, col6 = lit.columns(2)
         with col5:
-            command = 'wsl blastp -query blast_input.txt '
+            command = 'blastp -query blast_input.txt '
             task = 'blastp'
         ##    task = lit.radio("Type of task:",
         ##                     ('blastp',
