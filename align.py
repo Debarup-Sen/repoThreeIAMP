@@ -16,7 +16,7 @@ from io import StringIO
 lit.set_page_config(layout='wide', page_title="IAMP")
 
 lit.write("""
-# Welcome to the IAMP Sequence Alignment Toolbox!
+# Welcome to the IAMPDB Sequence Alignment Toolbox!
 *A toolbox for all alignment purposes.*
 
 """)
@@ -163,7 +163,7 @@ if 'BLASTp' in tool:
                 lit.text(''.join([i for i in myFile[:5] if '# Fields: ' not in i]))
                 try:
                     headers = [i for i in myFile if '# Fields: ' in i][0].replace('# Fields: ','').split(',')
-                    headers = (['Description', 'Source Organism', 'Target Organism'] +
+                    headers = (['Description', 'Source Organism'] +
                                 headers[2:] +
                                ['IAMP Accession'])
                     data = [i.strip().split('\t') for i in myFile if '#' not in i]
@@ -176,7 +176,6 @@ if 'BLASTp' in tool:
                                 data[i] = (
                                             [line[2]] +
                                             [line[5]] +
-                                            [line[8].replace('"', '')] +
                                             data[i][2:] +
                                             [
                                                 f'<a target="_blank" href="https://bblserver.org.in/iampdb/entry?id={accs}">{accs}</a>'
