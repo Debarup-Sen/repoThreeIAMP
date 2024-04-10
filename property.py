@@ -10,11 +10,11 @@ import pandas as pd
 
 lit.set_page_config(layout='wide')
 lit.write('''
-# Welcome to AMPDB Protein Feature calculation toolbox!
+# Welcome to IAMPDB Protein Feature calculation toolbox!
 Tools to calculate composition features, physicochemical properties and CTD (Composition, Transition, Distribution) descriptors of protein.
 ''')
 
-my_input = lit.text_input("Please enter your protein sequence/ AMPDB Acc. ID here:")
+my_input = lit.text_input("Please enter your protein sequence/ IAMPDB Acc. ID here:")
 my_input = my_input.upper()
 lit.markdown('<br>', unsafe_allow_html=True)
 lit.write('Please select the properties you want to be calculated: ')
@@ -33,18 +33,18 @@ if submit:
 if my_input and submit and not composition and not physicochemical and not ctddescriptors and not others:
     lit.error("Please select a descriptor type that you want to be calculated")
 elif my_input and submit:
-    if 'AMPDB_' not in my_input and my_input.isalpha() is False:
+    if 'IAMPDB' not in my_input and my_input.isalpha() is False:
         lit.error("Some non-alphabet is present in the sequence. Please re-check!")
-    elif 'AMPDB_' in my_input and my_input.replace('_', '').isalnum() is False:
+    elif 'IAMPDB' in my_input and my_input.isalnum() is False:
         lit.error("Some unrecognized character is present in the Acc. ID. Please re-check!")
     else:
-        if 'AMPDB_' in my_input:
+        if 'IAMPDB' in my_input:
             with open('master_dataset.tsv') as file:
                 l = ' '
                 while(True):
                     i = file.readline()
                     if i=='':
-                        lit.error('The AMPDB Acc. ID does not match with our database. Please re-check')
+                        lit.error('The IAMPDB Acc. ID does not match with our database. Please re-check')
                         my_input = None
                         break
                     j = i.split('\t')
