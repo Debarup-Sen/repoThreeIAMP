@@ -39,7 +39,7 @@ elif my_input and submit:
         lit.error("Some unrecognized character is present in the Acc. ID. Please re-check!")
     else:
         if 'IAMP' in my_input:
-            with open('master_dataset.tsv') as file:
+            with open('IAMP.tsv') as file:
                 l = ' '
                 while(True):
                     i = file.readline()
