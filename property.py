@@ -33,18 +33,18 @@ if submit:
 if my_input and submit and not composition and not physicochemical and not ctddescriptors and not others:
     lit.error("Please select a descriptor type that you want to be calculated")
 elif my_input and submit:
-    if 'IAMPDB' not in my_input and my_input.isalpha() is False:
+    if 'IAMP' not in my_input and my_input.isalpha() is False:
         lit.error("Some non-alphabet is present in the sequence. Please re-check!")
     elif 'IAMPDB' in my_input and my_input.isalnum() is False:
         lit.error("Some unrecognized character is present in the Acc. ID. Please re-check!")
     else:
-        if 'IAMPDB' in my_input:
+        if 'IAMP' in my_input:
             with open('master_dataset.tsv') as file:
                 l = ' '
                 while(True):
                     i = file.readline()
                     if i=='':
-                        lit.error('The IAMPDB Acc. ID does not match with our database. Please re-check')
+                        lit.error('The IAMP Acc. ID does not match with our database. Please re-check')
                         my_input = None
                         break
                     j = i.split('\t')
