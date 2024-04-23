@@ -48,8 +48,8 @@ elif my_input and submit:
                         my_input = None
                         break
                     j = i.split('\t')
-                    if my_input in j[1]:
-                        my_input = j[3]
+                    if my_input in j[0]:
+                        my_input = j[-1]
                         break
 
         lit.markdown('''<br>''', unsafe_allow_html=True)
